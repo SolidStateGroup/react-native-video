@@ -74,6 +74,7 @@ static int const RCTVideoUnset = -1;
   BOOL _fullscreenPlayerPresented;
   NSString *_filterName;
   BOOL _filterEnabled;
+  BOOL _mixWithSoundPlayer;
   UIViewController * _presentingViewController;
 #if __has_include(<react-native-video/RCTVideoCache.h>)
   RCTVideoCache * _videoCache;
@@ -109,6 +110,7 @@ static int const RCTVideoUnset = -1;
     _pictureInPicture = false;
     _ignoreSilentSwitch = @"inherit"; // inherit, ignore, obey
     _mixWithOthers = @"inherit"; // inherit, mix, duck
+    _mixWithSoundPlayer = false;
 #if TARGET_OS_IOS
     _restoreUserInterfaceForPIPStopCompletionHandler = NULL;
 #endif
@@ -231,7 +233,12 @@ static int const RCTVideoUnset = -1;
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification
 {
-  [self applyModifiers];
+  if (!_mixWithSoundPlayer) {
+    [self applyModifiers];
+  } else if (!_paused) {
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
+    [_player play];
+  }
   if (_playInBackground) {
     [_playerLayer setPlayer:_player];
     [_playerViewController setPlayer:_player];
@@ -776,7 +783,7 @@ static int const RCTVideoUnset = -1;
   if (_repeat) {
     AVPlayerItem *item = [notification object];
     [item seekToTime:kCMTimeZero];
-    if (!_muted) [self applyModifiers];
+    if (!_mixWithSoundPlayer) [self applyModifiers];
   } else {
     [self removePlayerTimeObserver];
   }
@@ -869,7 +876,7 @@ static int const RCTVideoUnset = -1;
     [_player pause];
     [_player setRate:0.0];
   } else {
-    if (!_muted) {
+    if (!_mixWithSoundPlayer) {
       AVAudioSession *session = [AVAudioSession sharedInstance];
       AVAudioSessionCategory category = nil;
       AVAudioSessionCategoryOptions options = nil;
@@ -968,6 +975,12 @@ static int const RCTVideoUnset = -1;
 - (void)setMuted:(BOOL)muted
 {
   _muted = muted;
+  [self applyModifiers];
+}
+
+- (void)setMixWithSoundPlayer:(BOOL)mix
+{
+  _mixWithSoundPlayer = mix;
   [self applyModifiers];
 }
 
@@ -1532,6 +1545,9 @@ static int const RCTVideoUnset = -1;
   [[NSNotificationCenter defaultCenter] removeObserver:self];
   
   [super removeFromSuperview];
+
+  // LF: Deactivate the audio session in order to clear mixWithOthers
+  if (_mixWithSoundPlayer) [[AVAudioSession sharedInstance] setActive:false error:nil];
 }
 
 #pragma mark - Export

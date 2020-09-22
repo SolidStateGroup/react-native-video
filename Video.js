@@ -418,6 +418,7 @@ Video.propTypes = {
   ),
   paused: PropTypes.bool,
   muted: PropTypes.bool,
+  mixWithSoundPlayer: PropTypes.bool,
   volume: PropTypes.number,
   bufferConfig: PropTypes.shape({
     minBufferMs: PropTypes.number,
