@@ -900,6 +900,8 @@ static int const RCTVideoUnset = -1;
       } else if (category == nil && options != nil) {
         [session setCategory:session.category withOptions:options error:nil];
       }
+    } else {
+      [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
     }
     
     [_player play];
