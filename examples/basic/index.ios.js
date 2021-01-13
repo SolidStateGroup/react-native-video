@@ -240,16 +240,16 @@ class VideoPlayer extends Component {
           <View style={styles.generalControls}>
             {
               (Platform.OS === 'ios') ?
-              <>
-                <View style={styles.ignoreSilentSwitchControl}>
-                  {this.renderIgnoreSilentSwitchControl('ignore')}
-                  {this.renderIgnoreSilentSwitchControl('obey')}
-                </View>
-                <View style={styles.mixWithOthersControl}>
-                  {this.renderMixWithOthersControl('mix')}
-                  {this.renderMixWithOthersControl('duck')}
-                </View>
-              </> : null
+                <>
+                  <View style={styles.ignoreSilentSwitchControl}>
+                    {this.renderIgnoreSilentSwitchControl('ignore')}
+                    {this.renderIgnoreSilentSwitchControl('obey')}
+                  </View>
+                  <View style={styles.mixWithOthersControl}>
+                    {this.renderMixWithOthersControl('mix')}
+                    {this.renderMixWithOthersControl('duck')}
+                  </View>
+                </> : null
             }
           </View>
 
@@ -334,16 +334,16 @@ class VideoPlayer extends Component {
           <View style={styles.generalControls}>
             {
               (Platform.OS === 'ios') ?
-              <>
-                <View style={styles.ignoreSilentSwitchControl}>
-                  {this.renderIgnoreSilentSwitchControl('ignore')}
-                  {this.renderIgnoreSilentSwitchControl('obey')}
-                </View>
-                <View style={styles.mixWithOthersControl}>
-                  {this.renderMixWithOthersControl('mix')}
-                  {this.renderMixWithOthersControl('duck')}
-                </View>
-              </> : null
+                <>
+                  <View style={styles.ignoreSilentSwitchControl}>
+                    {this.renderIgnoreSilentSwitchControl('ignore')}
+                    {this.renderIgnoreSilentSwitchControl('obey')}
+                  </View>
+                  <View style={styles.mixWithOthersControl}>
+                    {this.renderMixWithOthersControl('mix')}
+                    {this.renderMixWithOthersControl('duck')}
+                  </View>
+                </> : null
             }
           </View>
         </View>
